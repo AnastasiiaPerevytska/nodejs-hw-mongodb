@@ -34,16 +34,18 @@ if (filter.isFavourite === true) {
   contactsQuery.where('isFavourite').equals(false);
 }
 
-
-  const contactsCount = await ContactsCollection.find()
+const [contactsCount, contacts] = await Promise.all([
+  ContactsCollection.countDocuments({
+    userId: userId,
+    ...filter,
+  }),
+  ContactsCollection.find()
     .merge(contactsQuery)
-    .countDocuments();
-
-  const contacts = await contactsQuery
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder })
-    .exec();
+    .exec(),
+]);
 
   const paginationData = calculatePaginationData(contactsCount, perPage, page);
 
