@@ -14,11 +14,11 @@ export const getAllContacts = async ({
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const contactsQuery = ContactsCollection.find();
+  const contactsQuery = ContactsCollection.find({ userId });
 
-  if (userId) {
-    contactsQuery.where('userId').equals(userId);
-  }
+  // if (userId) {
+  //   contactsQuery.where('userId').equals(userId);
+  // }
 
     if (typeof filter.isFavourite === 'string') {
       filter.isFavourite = filter.isFavourite === 'true';
@@ -34,18 +34,16 @@ if (filter.isFavourite === true) {
   contactsQuery.where('isFavourite').equals(false);
 }
 
-const [contactsCount, contacts] = await Promise.all([
-  ContactsCollection.countDocuments({
-    userId: userId,
-    ...filter,
-  }),
-  ContactsCollection.find()
-    .merge(contactsQuery)
-    .skip(skip)
-    .limit(limit)
-    .sort({ [sortBy]: sortOrder })
-    .exec(),
-]);
+ const contactsCount = await ContactsCollection.countDocuments({
+   userId,
+   ...filter,
+ });
+
+ const contacts = await contactsQuery
+   .skip(skip)
+   .limit(limit)
+   .sort({ [sortBy]: sortOrder })
+   .exec();
 
   const paginationData = calculatePaginationData(contactsCount, perPage, page);
 
@@ -66,8 +64,8 @@ export const getContactById = async (contactId, userId) => {
   return contact;
 };
 
-export const createContact = async (payload) => {
-  const contact = await ContactsCollection.create(payload);
+export const createContact = async (payload, userId) => {
+  const contact = await ContactsCollection.create({ ...payload, userId });
   return contact;
 };
 
