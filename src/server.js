@@ -7,6 +7,7 @@ import authRouter from './routers/auth.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
+import { UPLOAD_DIR } from './constants/index.js';
 
 
 const PORT = Number(env('PORT', '3000'));
@@ -30,6 +31,7 @@ export const setupServer = () => {
     });
   });
 
+  app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
 
