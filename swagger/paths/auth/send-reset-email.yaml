@@ -1,0 +1,53 @@
+tags:
+  - Auth
+summary: Request password reset token
+operationId: requestResetToken
+description: 'Send an email to reset token'
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+        properties:
+          email:
+            description: "User's email"
+            type: string
+            example: 'dmytro3@example.com'
+responses:
+  '200':
+    description: 'Reset password email successfully sent'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Reset password email was successfully sent!'
+            data:
+              type: object
+              properties: {}
+  '404':
+    description: NotFoundError (User not found)
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'User not found'

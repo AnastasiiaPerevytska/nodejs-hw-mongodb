@@ -1,0 +1,60 @@
+tags:
+  - Auth
+summary: Reset user's password
+operationId: resetPassword
+description: "Reset user's password using a valid token"
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - password
+          - token
+        properties:
+          password:
+            description: 'New password'
+            type: string
+            example: '$2b$10$btAA1dNr/J.Z91kWEtn5T.m7Op9oNU9a8jn.9M/Zo7RnpghW9XTQe'
+          token:
+            description: 'Token received via email'
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzUyMTA3YTgwYTY3ZjAwNDMzNDRiZjkiLCJlbWFpbCI6ImFuYXN0YXNpaWEuemVsZW5pbmEuMTk5NUBnbWFpbC5jb20iLCJpYXQiOjE3MzM0MzE0MjksImV4cCI6MTczMzQzMjMyOX0.F4a_R-XXeaifpQrEFl9m_tFAw2grNWOI3ZrabMknMhc'
+responses:
+  '200':
+    description: 'Password was successfully reset'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Password was successfully reset!'
+            data:
+              type: object
+              properties: {}
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    description: NotFoundError (User not found)
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'User not found'

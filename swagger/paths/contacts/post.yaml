@@ -1,0 +1,72 @@
+tags:
+  - Contacts
+summary: Create a new contact
+operationId: createContact
+description: 'Create a new contact in the DB'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+          - contactType
+        properties:
+          name:
+            description: "Contact's name"
+            type: string
+            example: 'Dmytro Boyko'
+          phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: '+380000000002'
+          email:
+            description: "Contact's email"
+            type: string
+            example: 'dmytro3@example.com'
+          isFavourite:
+            description: 'IsFavourite or not for the contact'
+            type: boolean
+            example: false
+          contactType:
+            description: "Type of contact"
+            type: string
+            enum: ['work', 'home', 'personal']
+          userId:
+            description: "Contact's userId"
+            type: string
+            example: '67193a14adee2a2e0550fa3f'
+          photo:
+            description: "Link to contact's photo"
+            type: string
+            format: binary
+            example: 'https://res.cloudinary.com/uqwgdu/image/upload/image.png'
+responses:
+  '201':
+    description: 'Successfully created a contact'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully created a contact'
+            data:
+              type: object
+              $ref: '../../components/schemas/contact.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '400':
+    $ref: '../../components/responses/400.yaml'

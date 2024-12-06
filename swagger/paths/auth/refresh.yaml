@@ -1,0 +1,47 @@
+tags:
+  - Auth
+summary: Refresh user's session
+operationId: refreshUsersSession
+description: "Refresh user's session"
+security: []
+responses:
+  '200':
+    description: 'Session successfully refreshed'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully refreshed a session!'
+            data:
+              type: object
+              required:
+                - accesToken
+              properties:
+                accesToken:
+                  type: string
+                  example: 'wGNV1xXOKTILFDIxEhg9WA62vBxt/S5KZgATrCLx'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    description: NotFoundError (Session not found)
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'Session not found'
